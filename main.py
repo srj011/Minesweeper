@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import messagebox, simpledialog, PhotoImage, ttk
-import random, sys, os, csv
+import random
+import sys
+import os
+import csv
 
 WIDTH = 360
 HEIGHT = 450
@@ -63,11 +66,13 @@ class Cell:
             self.is_marked = True
             Cell.mines_left -= 1
             mines_left_label.configure(text=Cell.mines_left)
+            self.cell_btn_obj.unbind("<Button-1>")
         else:
             self.cell_btn_obj.configure(bg="SystemButtonFace")
             self.is_marked = False
             Cell.mines_left += 1
             mines_left_label.configure(text=Cell.mines_left)
+            self.cell_btn_obj.bind("<Button-1>", self.left_click)
 
     def reveal_mine(self):
         global gameRunning
@@ -84,6 +89,10 @@ class Cell:
             )
             self.is_opened = True
             Cell.cells_left -= 1
+
+            if self.is_marked:
+                Cell.mines_left += 1
+                mines_left_label.configure(text=Cell.mines_left)
 
             self.cell_btn_obj.unbind("<Button-1>")
             self.cell_btn_obj.unbind("<Button-3>")
